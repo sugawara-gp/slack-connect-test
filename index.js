@@ -10,6 +10,7 @@ var PORT = process.env.PORT || 3000;
 var SLACK_TOKEN = process.env.SLACK_TOKEN;
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/hook', (req, res)=> {
