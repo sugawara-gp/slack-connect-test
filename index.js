@@ -13,9 +13,9 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/hook', (req, res)=> {
-    // TODO Validate Token
+    console.log(req.body);
     if (req.body.token == SLACK_TOKEN){
-        io.emit('ding', 'ding-message');
+        io.emit('ding', req.body.text);
         res.send(200);
     }else{
         res.send(404);
