@@ -7,10 +7,6 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@gitlab.snkz.org:11122/kazano/slack_ws_sample.git"
-  },
   "author": "",
   "dependencies": {
     "body-parser": "^1.14.2",
