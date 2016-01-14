@@ -6,19 +6,29 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
+var request = require('request');
 var PORT = process.env.PORT || 3000;
 var SLACK_TOKEN = process.env.SLACK_TOKEN;
+var SLACK_WEBAPI_TOKEN = process.env.SLACK_WEBAPI_TOKEN;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/hook', (req, res)=> {
-    console.log(req.body);
-    if (req.body.token == SLACK_TOKEN){
-        io.emit('ding', 'ding!');
+    if (req.body.token == SLACK_TOKEN) {
+
+        request(`https://slack.com/api/users.info?token=${SLACK_WEBAPI_TOKEN}&user=${req.body.user_id}`, (error, userInfoRes, body)=> {
+            var jsonBody = JSON.parse(body);
+            if (jsonBody.ok == true) {
+                io.emit('ding', {name: jsonBody.user.name, image: jsonBody.user.profile.image_48});
+            } else {
+                io.emit('ding', {error: true});
+            }
+        });
+
         res.send(200);
-    }else{
+    } else {
         res.send(404);
     }
 });
